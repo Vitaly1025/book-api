@@ -1,0 +1,204 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample server.",
+        "title": "Book API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:4000",
+    "paths": {
+        "/create-book": {
+            "post": {
+                "description": "Create a book with data",
+                "consumes": [
+                    "text/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create a book",
+                "parameters": [
+                    {
+                        "description": "Book",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BookRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                }
+            }
+        },
+        "/delete-book/{id}": {
+            "delete": {
+                "description": "This method delete book by id",
+                "consumes": [
+                    "text/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete book by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Book Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                }
+            }
+        },
+        "/get-book/{id}": {
+            "get": {
+                "description": "This method gets book via id",
+                "consumes": [
+                    "text/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get book by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Book Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ]
+            }
+        },
+        "/get-books": {
+            "get": {
+                "description": "This method return books",
+                "consumes": [
+                    "text/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get books",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "BookName",
+                        "name": "bookname",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "GenreName",
+                        "name": "genre",
+                        "in": "query"
+                    }
+                ]
+            }
+        },
+        "/update-book": {
+            "post": {
+                "description": "Update book",
+                "consumes": [
+                    "text/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Book Operations"
+                ],
+                "summary": "Update book",
+                "parameters": [
+                    {
+                        "description": "Book",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Book"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Book": {
+            "type": "object",
+            "required": [
+                "amount",
+                "genre",
+                "name",
+                "price"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "genre": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
+        "models.BookRequest": {
+            "type": "object",
+            "required": [
+                "amount",
+                "genre",
+                "name",
+                "price"
+            ],
+            "properties": {
+                "amount": {
+                    "type": "integer"
+                },
+                "genre": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+}

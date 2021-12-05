@@ -1,0 +1,135 @@
+definitions:
+  models.Book:
+    properties:
+      amount:
+        type: integer
+      genre:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+    required:
+    - amount
+    - genre
+    - name
+    - price
+    type: object
+  models.BookRequest:
+    properties:
+      amount:
+        type: integer
+      genre:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+    required:
+    - amount
+    - genre
+    - name
+    - price
+    type: object
+host: localhost:4000
+info:
+  contact: {}
+  description: This is a sample server.
+  title: Book API
+  version: "1.0"
+paths:
+  /create-book:
+    post:
+      consumes:
+      - text/json
+      description: Create a book with data
+      parameters:
+      - description: Book
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.BookRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: int
+      summary: Create a book
+  /delete-book/{id}:
+    delete:
+      consumes:
+      - text/json
+      description: This method delete book by id
+      parameters:
+      - description: Book Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: int
+      summary: Delete book by ID
+  /get-book/{id}:
+    get:
+      consumes:
+      - text/json
+      description: This method gets book via id
+      parameters:
+      - description: Book Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      summary: Get book by ID
+  /get-books:
+    get:
+      consumes:
+      - text/json
+      description: This method return books
+      parameters:
+      - description: BookName
+        in: query
+        name: bookname
+        type: string
+      - description: GenreName
+        in: query
+        name: genre
+        type: string
+      produces:
+      - application/json
+      summary: Get books
+  /update-book:
+    post:
+      consumes:
+      - text/json
+      description: Update book
+      parameters:
+      - description: Book
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/models.Book'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: int
+      summary: Update book
+      tags:
+      - Book Operations
+swagger: "2.0"
