@@ -4,7 +4,7 @@ server:
   host: 127.0.0.1
 # Database configurations
 db: 
-  host: '127.0.0.1'
+  host: 'db'
   port: 5432
   user: 'postgres'
   password: '1234qwerty'
