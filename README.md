@@ -2,11 +2,11 @@
 This is API for working with books in shop, where you can set price for books, get books and delete books.
 ### Features
 This project implements a clean multi layered architecture that helps to separate the layers among themselves. Each layer has its own area of responsibility and is independent of each other.
-   - ```pkg/handler```  - describes logic for receiving request and sending response
-   - ```pkg/service```  - describes some buisness logic
-   - ```pkg/repository```  - describes logic for working with database 
-   - ```pkg/model```  - describes models
-   - ```pkg/middleware```  - describes helper logic for processing errors
+   - ```handler```  - describes logic for receiving request and sending response
+   - ```service```  - describes some buisness logic
+   - ```repository```  - describes logic for working with database 
+   - ```model```  - describes models
+   - ```middleware```  - describes helper logic for processing errors
 
 REST API implements OpenAPI specification. It means that Swagger UI can be used for making request to the API. In section Running you can find instruction how to browse endpoints.
 ### Preparation
