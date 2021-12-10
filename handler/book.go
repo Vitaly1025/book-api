@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	models "book-api/pkg/model"
-	validators "book-api/pkg/validator"
+	models "book-api/model"
+	validators "book-api/validator"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -12,11 +12,12 @@ import (
 )
 
 // @Summary Create a book
+// @Tags Book Operations
 // @Description Create a book with data
 // @Accept text/json
 // @Param request body models.BookRequest true "Book"
 // @Produce  json
-// @Router /create-book [post]
+// @Router /book [post]
 // @Success  200  {int} resp
 func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
@@ -25,10 +26,7 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewDecoder(r.Body).Decode(&p); err != nil {
 		h.md.Error.Error("invalid data", err.Error(), http.StatusBadRequest, w)
 		return
-	} else if(models.BookRequest{}) == p {
-		h.md.Error.Error("invalid data", "", http.StatusBadRequest, w)
-		return
-	}
+	} 
 
 	err := validators.ValidateRequest(p)
 	if err != nil {
@@ -46,11 +44,12 @@ func (h *Handler) CreateBook(w http.ResponseWriter, r *http.Request) {
 }
 
 // @Summary Get book by ID
+// @Tags Book Operations
 // @Description This method gets book via id
 // @Accept text/json
 // @Param id path int true "Book Id"
 // @Produce  json
-// @Router /get-book/{id} [get]
+// @Router /book/{id} [get]
 func (h *Handler) GetBookById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
     id, ok := vars["id"]
@@ -74,11 +73,12 @@ func (h *Handler) GetBookById(w http.ResponseWriter, r *http.Request) {
 }
 
 // @Summary Delete book by ID
+// @Tags Book Operations
 // @Description This method delete book by id
 // @Accept text/json
 // @Param id path int true "Book Id"
 // @Produce  json
-// @Router /delete-book/{id} [delete]
+// @Router /book/{id} [delete]
 // @Success  204  {int} resp
 func (h *Handler) DeleteBook(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
@@ -102,12 +102,13 @@ func (h *Handler) DeleteBook(w http.ResponseWriter, r *http.Request) {
 }
 
 // @Summary Get books
+// @Tags Book Operations
 // @Description This method return books
 // @Accept text/json
 // @Param bookname query string false "BookName"
 // @Param genre query string false "GenreName"
 // @Produce  json
-// @Router /get-books [get]
+// @Router /book [get]
 func (h *Handler) GetAllBook(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
     bookname := query.Get("bookname")
@@ -128,7 +129,7 @@ func (h *Handler) GetAllBook(w http.ResponseWriter, r *http.Request) {
 // @Accept text/json
 // @Param request body models.Book true "Book"
 // @Produce  json
-// @Router /update-book [post]
+// @Router /book [put]
 // @Success  200  {int} resp
 func (h *Handler) UpdateBook(w http.ResponseWriter, r *http.Request) {
 	var p models.Book

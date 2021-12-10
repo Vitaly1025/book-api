@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	_ "book-api/docs"
-	"book-api/pkg/middleware"
-	"book-api/pkg/service"
+	"book-api/middleware"
+	"book-api/service"
 
 	"github.com/gorilla/mux"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -32,11 +32,11 @@ func (h *Handler) InitRoutes() *mux.Router{
 	))
 
 	//Init basic routes
-	router.HandleFunc("/create-book", h.CreateBook).Methods(http.MethodPost)
-	router.HandleFunc("/update-book", h.UpdateBook).Methods(http.MethodPost)
-	router.HandleFunc("/get-book/{id}", h.GetBookById).Methods(http.MethodGet)
-	router.HandleFunc("/get-books", h.GetAllBook).Methods(http.MethodGet)
-	router.HandleFunc("/delete-book/{id}", h.DeleteBook).Methods(http.MethodDelete)
+	router.HandleFunc("/book", h.CreateBook).Methods(http.MethodPost)
+	router.HandleFunc("/book", h.UpdateBook).Methods(http.MethodPut)
+	router.HandleFunc("/book/{id}", h.GetBookById).Methods(http.MethodGet)
+	router.HandleFunc("/book", h.GetAllBook).Methods(http.MethodGet)
+	router.HandleFunc("/book/{id}", h.DeleteBook).Methods(http.MethodDelete)
 	
 
 	return router

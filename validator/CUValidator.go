@@ -1,7 +1,7 @@
 package validators
 
 import (
-	models "book-api/pkg/model"
+	models "book-api/model"
 
 	"github.com/go-playground/validator/v10"
 )

@@ -1,7 +1,7 @@
 package repository
 
 import (
-	models "book-api/pkg/model"
+	models "book-api/model"
 	"errors"
 	"fmt"
 	"log"

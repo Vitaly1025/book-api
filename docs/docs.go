@@ -23,88 +23,7 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/create-book": {
-            "post": {
-                "description": "Create a book with data",
-                "consumes": [
-                    "text/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Create a book",
-                "parameters": [
-                    {
-                        "description": "Book",
-                        "name": "request",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.BookRequest"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "int"
-                        }
-                    }
-                }
-            }
-        },
-        "/delete-book/{id}": {
-            "delete": {
-                "description": "This method delete book by id",
-                "consumes": [
-                    "text/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Delete book by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Book Id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No Content",
-                        "schema": {
-                            "type": "int"
-                        }
-                    }
-                }
-            }
-        },
-        "/get-book/{id}": {
-            "get": {
-                "description": "This method gets book via id",
-                "consumes": [
-                    "text/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "summary": "Get book by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Book Id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ]
-            }
-        },
-        "/get-books": {
+        "/book": {
             "get": {
                 "description": "This method return books",
                 "consumes": [
@@ -112,6 +31,9 @@ var doc = `{
                 ],
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Book Operations"
                 ],
                 "summary": "Get books",
                 "parameters": [
@@ -128,10 +50,8 @@ var doc = `{
                         "in": "query"
                     }
                 ]
-            }
-        },
-        "/update-book": {
-            "post": {
+            },
+            "put": {
                 "description": "Update book",
                 "consumes": [
                     "text/json"
@@ -157,6 +77,92 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a book with data",
+                "consumes": [
+                    "text/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Book Operations"
+                ],
+                "summary": "Create a book",
+                "parameters": [
+                    {
+                        "description": "Book",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.BookRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "int"
+                        }
+                    }
+                }
+            }
+        },
+        "/book/{id}": {
+            "get": {
+                "description": "This method gets book via id",
+                "consumes": [
+                    "text/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Book Operations"
+                ],
+                "summary": "Get book by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Book Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ]
+            },
+            "delete": {
+                "description": "This method delete book by id",
+                "consumes": [
+                    "text/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Book Operations"
+                ],
+                "summary": "Delete book by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Book Id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
                         "schema": {
                             "type": "int"
                         }

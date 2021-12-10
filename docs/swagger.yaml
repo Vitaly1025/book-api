@@ -40,7 +40,25 @@ info:
   title: Book API
   version: "1.0"
 paths:
-  /create-book:
+  /book:
+    get:
+      consumes:
+      - text/json
+      description: This method return books
+      parameters:
+      - description: BookName
+        in: query
+        name: bookname
+        type: string
+      - description: GenreName
+        in: query
+        name: genre
+        type: string
+      produces:
+      - application/json
+      summary: Get books
+      tags:
+      - Book Operations
     post:
       consumes:
       - text/json
@@ -60,58 +78,9 @@ paths:
           schema:
             type: int
       summary: Create a book
-  /delete-book/{id}:
-    delete:
-      consumes:
-      - text/json
-      description: This method delete book by id
-      parameters:
-      - description: Book Id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      responses:
-        "204":
-          description: No Content
-          schema:
-            type: int
-      summary: Delete book by ID
-  /get-book/{id}:
-    get:
-      consumes:
-      - text/json
-      description: This method gets book via id
-      parameters:
-      - description: Book Id
-        in: path
-        name: id
-        required: true
-        type: integer
-      produces:
-      - application/json
-      summary: Get book by ID
-  /get-books:
-    get:
-      consumes:
-      - text/json
-      description: This method return books
-      parameters:
-      - description: BookName
-        in: query
-        name: bookname
-        type: string
-      - description: GenreName
-        in: query
-        name: genre
-        type: string
-      produces:
-      - application/json
-      summary: Get books
-  /update-book:
-    post:
+      tags:
+      - Book Operations
+    put:
       consumes:
       - text/json
       description: Update book
@@ -130,6 +99,42 @@ paths:
           schema:
             type: int
       summary: Update book
+      tags:
+      - Book Operations
+  /book/{id}:
+    delete:
+      consumes:
+      - text/json
+      description: This method delete book by id
+      parameters:
+      - description: Book Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: int
+      summary: Delete book by ID
+      tags:
+      - Book Operations
+    get:
+      consumes:
+      - text/json
+      description: This method gets book via id
+      parameters:
+      - description: Book Id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      summary: Get book by ID
       tags:
       - Book Operations
 swagger: "2.0"

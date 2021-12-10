@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"book-api/pkg/middleware"
-	models "book-api/pkg/model"
-	"book-api/pkg/service"
-	mock_service "book-api/pkg/service/mocks"
+	"book-api/middleware"
+	models "book-api/model"
+	"book-api/service"
+	mock_service "book-api/service/mocks"
 	"bytes"
 	"fmt"
 	"net/http"

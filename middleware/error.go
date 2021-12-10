@@ -1,7 +1,7 @@
 package middleware
 
 import (
-	models "book-api/pkg/model"
+	models "book-api/model"
 	"encoding/json"
 	"log"
 	"net/http"

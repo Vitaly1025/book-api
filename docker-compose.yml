@@ -15,14 +15,11 @@ services:
       - inner_host
   book-api:
     build: ./
-    command: >
-      sh -c "migrate -path ./schema -database 'postgres://postgres:1234qwerty@db:5432/postgres?sslmode=disable' up &&
-             ./book-api"
+    command: ./book-api
+    env_file:
+      - ./configs/config.env
     ports:
       - 4000:4000
-    environment:
-      - SERVER_PORT=4000
-      - DB_HOST=db
     networks:
       - inner_host
     depends_on:
