@@ -48,4 +48,4 @@ REST API implements OpenAPI specification. It means that Swagger UI can be used 
 App have testing on two layers. It's recieving request and working with database. It's because service layer haven't logic for testing on my opinion
 1. Run the next command from the local source's directory:
 
-   ```go test .\pkg\repository && go test .\pkg\service```
+   ```go test .\repository && go test .\service```
