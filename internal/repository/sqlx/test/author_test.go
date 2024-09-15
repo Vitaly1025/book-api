@@ -62,9 +62,10 @@ func TestCreateOrUpdateAuthor(t *testing.T) {
 			author:   domain.BookAuthor{Name: "Error Author"},
 			mockSetup: func() {
 				query := fmt.Sprintf(`INSERT INTO %s \(name\) VALUES \(\$1\) ON CONFLICT \(name\) DO UPDATE SET name = EXCLUDED.name; RETURNING id`, sqlx.AuthorTable)
+				expectedErr := fmt.Errorf("db error")
 				mock.ExpectBegin()
-				mock.ExpectQuery(query).WithArgs("Error Author").WillReturnError(fmt.Errorf("db error"))
-				mock.ExpectRollback()
+				mock.ExpectQuery(query).WithArgs("Error Author").WillReturnError(expectedErr)
+				mock.ExpectRollback().WillReturnError(expectedErr)
 			},
 			expectErr:  true,
 			expectedID: 0,

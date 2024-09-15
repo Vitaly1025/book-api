@@ -49,9 +49,10 @@ func TestUpsertGenreToBook(t *testing.T) {
 			genreID:  2,
 			mockSetup: func() {
 				query := fmt.Sprintf(`INSERT INTO %s \(book_id, genre_id\) VALUES \(\$1, \$2\) ON CONFLICT \(book_id\) DO UPDATE SET genre_id = EXCLUDED.genre_id`, sqlx.BookGenreTable)
+				expectedErr := fmt.Errorf("db error")
 				mock.ExpectBegin()
-				mock.ExpectExec(query).WithArgs(1, 2).WillReturnError(fmt.Errorf("db error"))
-				mock.ExpectRollback()
+				mock.ExpectExec(query).WithArgs(1, 2).WillReturnError(expectedErr)
+				mock.ExpectRollback().WillReturnError(expectedErr)
 			},
 			expectErr: true,
 		},
@@ -179,9 +180,10 @@ func TestDeleteBookGenre(t *testing.T) {
 			bookID:   1,
 			mockSetup: func() {
 				query := fmt.Sprintf(`DELETE FROM %s WHERE book_id = \$1`, sqlx.BookGenreTable)
+				expectedErr := fmt.Errorf("db error")
 				mock.ExpectBegin()
-				mock.ExpectExec(query).WithArgs(1).WillReturnError(fmt.Errorf("db error"))
-				mock.ExpectRollback()
+				mock.ExpectExec(query).WithArgs(1).WillReturnError(expectedErr)
+				mock.ExpectRollback().WillReturnError(expectedErr)
 			},
 			expectErr: true,
 		},

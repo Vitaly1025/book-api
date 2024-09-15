@@ -1,5 +1,5 @@
 #!/bin/sh
 
   gofumpt -l -w .
-#   go test -v ./...
-  # golangci-lint run
+  go test -v ./...
+  golangci-lint run

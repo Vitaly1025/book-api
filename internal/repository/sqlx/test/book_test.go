@@ -70,11 +70,12 @@ func TestCreateBook(t *testing.T) {
 			},
 			mockSetup: func() {
 				query := fmt.Sprintf(`INSERT INTO %s \(name, description, cover, page_count, rate, author_id\) VALUES \(\$1, \$2, \$3, \$4, \$5, \$6\) RETURNING id`, sqlx.BookTable)
+				expectedErr := fmt.Errorf("db error")
 				mock.ExpectBegin()
 				mock.ExpectQuery(query).
 					WithArgs("Test Book", "Test Description", []byte("cover.png"), 100, 4.5, 1).
-					WillReturnError(fmt.Errorf("db error"))
-				mock.ExpectRollback()
+					WillReturnError(expectedErr)
+				mock.ExpectRollback().WillReturnError(expectedErr)
 			},
 			expectedBookID: 0,
 			expectErr:      true,
@@ -161,11 +162,12 @@ func TestUpdateBook(t *testing.T) {
 				query := fmt.Sprintf(`UPDATE %s SET description = \$2, cover = \$3, page_count = \$4, rate = \$5, author_id = \$6
 				WHERE name = \$1
 				RETURNING id`, sqlx.BookTable)
+				expectedErr := fmt.Errorf("db error")
 				mock.ExpectBegin()
 				mock.ExpectQuery(query).
 					WithArgs("Test Book", "Test Description", []byte("cover.png"), 100, 4.5, 1).
-					WillReturnError(fmt.Errorf("db error"))
-				mock.ExpectRollback()
+					WillReturnError(expectedErr)
+				mock.ExpectRollback().WillReturnError(expectedErr)
 			},
 			expectedBookID: 0,
 			expectErr:      true,
@@ -319,9 +321,10 @@ func TestDeleteBook(t *testing.T) {
 			bookId:   1,
 			mockSetup: func() {
 				query := fmt.Sprintf(`DELETE FROM %s WHERE id = \$1`, sqlx.BookTable)
+				expectedErr := fmt.Errorf("db error")
 				mock.ExpectBegin()
-				mock.ExpectExec(query).WithArgs(1).WillReturnError(fmt.Errorf("db error"))
-				mock.ExpectRollback()
+				mock.ExpectExec(query).WithArgs(1).WillReturnError(expectedErr)
+				mock.ExpectRollback().WillReturnError(expectedErr)
 			},
 			expectErr: true,
 		},
