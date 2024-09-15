@@ -46,21 +46,30 @@ func (h *DeleteBookHandler) DeleteBook(w http.ResponseWriter, r *http.Request) {
 	id, ok := req["id"]
 	if !ok {
 		log.Error("cannot find 'id' from request", slog.String("error", err.Error()))
-		rw.Error(http.StatusBadRequest, "can't parse param")
+		err = rw.Error(http.StatusBadRequest, "can't parse param")
+		if err != nil {
+			log.Error("cannot create error response", slog.String("error", err.Error()))
+		}
 		return
 	}
 
 	intId, err := strconv.Atoi(id)
 	if err != nil {
 		log.Error("cannot parse to int", slog.String("error", err.Error()))
-		rw.Error(http.StatusBadRequest, "incorrect param")
+		err = rw.Error(http.StatusBadRequest, "incorrect param")
+		if err != nil {
+			log.Error("cannot create error response", slog.String("error", err.Error()))
+		}
 		return
 	}
 
 	err = h.bookService.DeleteBook(ctx, intId)
 	if err != nil {
 		log.Error("cannot delete a book", slog.String("error", err.Error()))
-		rw.Error(http.StatusBadRequest, "problem with deleting the book")
+		err = rw.Error(http.StatusBadRequest, "problem with deleting the book")
+		if err != nil {
+			log.Error("cannot create error response", slog.String("error", err.Error()))
+		}
 		return
 	}
 

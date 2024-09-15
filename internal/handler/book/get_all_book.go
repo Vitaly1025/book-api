@@ -42,9 +42,15 @@ func (h *GetAllBookHandler) GetAllBook(w http.ResponseWriter, r *http.Request) {
 	resp, err := h.bookService.GetBooks(ctx)
 	if err != nil {
 		log.Error("cannot get a book", slog.String("error", err.Error()))
-		rw.Error(http.StatusBadRequest, "can't got a book")
+		err = rw.Error(http.StatusBadRequest, "can't got a book")
+		if err != nil {
+			log.Error("cannot create error response", slog.String("error", err.Error()))
+		}
 		return
 	}
 
-	rw.JSON(http.StatusOK, resp)
+	err = rw.JSON(http.StatusOK, resp)
+	if err != nil {
+		log.Error("cannot create json response", slog.String("error", err.Error()))
+	}
 }

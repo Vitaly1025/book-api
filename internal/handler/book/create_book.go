@@ -50,14 +50,20 @@ func (h *CreateBookHandler) CreateBook(w http.ResponseWriter, r *http.Request) {
 	err := rr.ParsePostRequest(r, &req)
 	if err != nil {
 		log.Error("cannot parse post request", slog.String("error", err.Error()))
-		rw.Error(http.StatusBadRequest, "invalid data")
+		err = rw.Error(http.StatusBadRequest, "invalid data")
+		if err != nil {
+			log.Error("cannot create error response", slog.String("error", err.Error()))
+		}
 		return
 	}
 
 	err = h.validator.Struct(&req)
 	if err != nil {
 		log.Error("cannot validate post request", slog.String("error", err.Error()))
-		rw.Error(http.StatusBadRequest, "data validation failed")
+		err = rw.Error(http.StatusBadRequest, "data validation failed")
+		if err != nil {
+			log.Error("cannot create error response", slog.String("error", err.Error()))
+		}
 		return
 	}
 
@@ -66,9 +72,15 @@ func (h *CreateBookHandler) CreateBook(w http.ResponseWriter, r *http.Request) {
 	resp, err := h.bs.CreateBook(ctx, query)
 	if err != nil {
 		log.Error("cannot create book", slog.String("error", err.Error()))
-		rw.Error(http.StatusBadRequest, "smth went wrong :(")
+		err = rw.Error(http.StatusBadRequest, "smth went wrong :(")
+		if err != nil {
+			log.Error("cannot create error response", slog.String("error", err.Error()))
+		}
 		return
 	}
 
-	rw.JSON(http.StatusOK, mapper.ToDTOCreateBook(resp))
+	err = rw.JSON(http.StatusOK, mapper.ToDTOCreateBook(resp))
+	if err != nil {
+		log.Error("cannot create json response", slog.String("error", err.Error()))
+	}
 }
