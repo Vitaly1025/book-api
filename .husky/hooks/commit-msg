@@ -1,0 +1,8 @@
+#!/bin/sh
+MSG_FILE=$1
+MSG=$(cat "$MSG_FILE")
+
+if ! echo "$MSG" | grep -qE '^(feat|fix|docs|style|refactor|perf|test|chore|build): .+'; then
+  echo "ERROR: your commit message doesn't meet creterieas, please try to rewrite your commit message or just use cz."
+  exit 1
+fi
