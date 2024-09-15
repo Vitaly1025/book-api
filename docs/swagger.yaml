@@ -1,43 +1,98 @@
 definitions:
-  models.Book:
+  dto.BookResponse:
     properties:
-      amount:
-        minimum: 0
-        type: integer
-      genre:
-        type: integer
+      author_name:
+        type: string
+      cover:
+        items:
+          type: integer
+        type: array
+      description:
+        type: string
+      genres:
+        items:
+          type: string
+        type: array
       id:
         type: integer
       name:
-        maxLength: 100
         type: string
-      price:
-        minimum: 0
-        type: number
-    required:
-    - amount
-    - genre
-    - name
-    - price
+      page_count:
+        type: integer
+      rate:
+        type: integer
     type: object
-  models.BookRequest:
+  dto.CreateBookRequest:
     properties:
-      amount:
-        minimum: 0
-        type: integer
-      genre:
-        type: integer
-      name:
-        maxLength: 100
+      author_name:
         type: string
-      price:
+      cover:
+        items:
+          type: integer
+        type: array
+      description:
+        type: string
+      genres:
+        items:
+          type: integer
+        type: array
+      name:
+        type: string
+      page_count:
+        minimum: 1
+        type: integer
+      rate:
+        maximum: 10
         minimum: 0
         type: number
     required:
-    - amount
-    - genre
+    - author_name
+    - cover
+    - description
+    - genres
     - name
-    - price
+    - page_count
+    type: object
+  dto.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  dto.SimpleResponse:
+    properties:
+      id:
+        type: integer
+    type: object
+  dto.UpdateBookRequest:
+    properties:
+      author_name:
+        type: string
+      cover:
+        items:
+          type: integer
+        type: array
+      description:
+        type: string
+      genres:
+        items:
+          type: integer
+        type: array
+      name:
+        type: string
+      page_count:
+        minimum: 1
+        type: integer
+      rate:
+        maximum: 10
+        minimum: 0
+        type: number
+    required:
+    - author_name
+    - cover
+    - description
+    - genres
+    - name
+    - page_count
     type: object
 host: localhost:4000
 info:
@@ -46,76 +101,14 @@ info:
   title: Book API
   version: "1.0"
 paths:
-  /book:
-    get:
-      consumes:
-      - text/json
-      description: This method return books
-      parameters:
-      - description: BookName
-        in: query
-        name: bookname
-        type: string
-      - description: GenreName
-        in: query
-        name: genre
-        type: string
-      produces:
-      - application/json
-      responses: {}
-      summary: Get books
-      tags:
-      - Book Operations
-    post:
-      consumes:
-      - text/json
-      description: Create a book with data
-      parameters:
-      - description: Book
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/models.BookRequest'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: int
-      summary: Create a book
-      tags:
-      - Book Operations
-    put:
-      consumes:
-      - text/json
-      description: Update book
-      parameters:
-      - description: Book
-        in: body
-        name: request
-        required: true
-        schema:
-          $ref: '#/definitions/models.Book'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            type: int
-      summary: Update book
-      tags:
-      - Book Operations
-  /book/{id}:
+  /books:
     delete:
       consumes:
-      - text/json
-      description: This method delete book by id
+      - application/json
+      description: Delete a book entry from the system using the book's ID
       parameters:
-      - description: Book Id
-        in: path
+      - description: Book ID
+        in: query
         name: id
         required: true
         type: integer
@@ -124,25 +117,88 @@ paths:
       responses:
         "204":
           description: No Content
+        "400":
+          description: 'Bad Request: Invalid parameter or deletion issue'
           schema:
-            type: int
-      summary: Delete book by ID
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Delete a book by ID
       tags:
-      - Book Operations
+      - Books
     get:
       consumes:
-      - text/json
-      description: This method gets book via id
+      - application/json
+      description: Retrieve a list of books by providing their IDs as a comma-separated
+        query parameter.
       parameters:
-      - description: Book Id
-        in: path
-        name: id
+      - description: Comma-separated list of book IDs
+        in: query
+        name: ids
         required: true
-        type: integer
+        type: string
       produces:
       - application/json
-      responses: {}
-      summary: Get book by ID
+      responses:
+        "200":
+          description: List of books
+          schema:
+            items:
+              $ref: '#/definitions/dto.BookResponse'
+            type: array
+        "400":
+          description: Error retrieving books
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Retrieve books by their IDs
       tags:
-      - Book Operations
+      - Books
+    post:
+      consumes:
+      - application/json
+      description: Create a new book entry in the system
+      parameters:
+      - description: Create Book Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.CreateBookRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Book created successfully
+          schema:
+            $ref: '#/definitions/dto.SimpleResponse'
+        "400":
+          description: Invalid data or validation failed
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Create a new book
+      tags:
+      - Books
+    put:
+      consumes:
+      - application/json
+      description: Update the details of an existing book in the system
+      parameters:
+      - description: Update Book Request
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/dto.UpdateBookRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Book updated successfully
+          schema:
+            $ref: '#/definitions/dto.BookResponse'
+        "400":
+          description: Invalid data or validation failed
+          schema:
+            $ref: '#/definitions/dto.ErrorResponse'
+      summary: Update an existing book
+      tags:
+      - Books
 swagger: "2.0"

@@ -23,14 +23,14 @@ func NewGetAllBookHandler(s GetAllBookService, l *slog.Logger) *GetAllBookHandle
 	return &GetAllBookHandler{bookService: s, logger: l}
 }
 
-// @Summary Get books
-// @Tags Book Operations
-// @Description This method return books
-// @Accept text/json
-// @Param predicate query string false "BookName"
-// @Param genre query string false "GenreName"
-// @Produce  json
-// @Router /book [get]
+// GetAllBook godoc
+// @Summary Get all books
+// @Description Retrieve a list of all books
+// @Tags Books
+// @Produce json
+// @Success 200 {array} dto.BookResponse "List of books"
+// @Failure 400 {object} dto.ErrorResponse "Error retrieving books"
+// @Router /books [get]
 func (h *GetAllBookHandler) GetAllBook(w http.ResponseWriter, r *http.Request) {
 	const op = "GetAllBook"
 	log := h.logger.With(

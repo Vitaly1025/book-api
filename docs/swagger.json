@@ -8,150 +8,151 @@
     },
     "host": "localhost:4000",
     "paths": {
-        "/book": {
+        "/books": {
             "get": {
-                "description": "This method return books",
+                "description": "Retrieve a list of books by providing their IDs as a comma-separated query parameter.",
                 "consumes": [
-                    "text/json"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Book Operations"
+                    "Books"
                 ],
-                "summary": "Get books",
+                "summary": "Retrieve books by their IDs",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "BookName",
-                        "name": "bookname",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "GenreName",
-                        "name": "genre",
-                        "in": "query"
+                        "description": "Comma-separated list of book IDs",
+                        "name": "ids",
+                        "in": "query",
+                        "required": true
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "200": {
+                        "description": "List of books",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.BookResponse"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error retrieving books",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
+                        }
+                    }
+                }
             },
             "put": {
-                "description": "Update book",
+                "description": "Update the details of an existing book in the system",
                 "consumes": [
-                    "text/json"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Book Operations"
+                    "Books"
                 ],
-                "summary": "Update book",
+                "summary": "Update an existing book",
                 "parameters": [
                     {
-                        "description": "Book",
+                        "description": "Update Book Request",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Book"
+                            "$ref": "#/definitions/dto.UpdateBookRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Book updated successfully",
                         "schema": {
-                            "type": "int"
+                            "$ref": "#/definitions/dto.BookResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data or validation failed",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
                         }
                     }
                 }
             },
             "post": {
-                "description": "Create a book with data",
+                "description": "Create a new book entry in the system",
                 "consumes": [
-                    "text/json"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Book Operations"
+                    "Books"
                 ],
-                "summary": "Create a book",
+                "summary": "Create a new book",
                 "parameters": [
                     {
-                        "description": "Book",
+                        "description": "Create Book Request",
                         "name": "request",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.BookRequest"
+                            "$ref": "#/definitions/dto.CreateBookRequest"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK",
+                        "description": "Book created successfully",
                         "schema": {
-                            "type": "int"
+                            "$ref": "#/definitions/dto.SimpleResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data or validation failed",
+                        "schema": {
+                            "$ref": "#/definitions/dto.ErrorResponse"
                         }
                     }
                 }
-            }
-        },
-        "/book/{id}": {
-            "get": {
-                "description": "This method gets book via id",
-                "consumes": [
-                    "text/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Book Operations"
-                ],
-                "summary": "Get book by ID",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Book Id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {}
             },
             "delete": {
-                "description": "This method delete book by id",
+                "description": "Delete a book entry from the system using the book's ID",
                 "consumes": [
-                    "text/json"
+                    "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "Book Operations"
+                    "Books"
                 ],
-                "summary": "Delete book by ID",
+                "summary": "Delete a book by ID",
                 "parameters": [
                     {
                         "type": "integer",
-                        "description": "Book Id",
+                        "description": "Book ID",
                         "name": "id",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     }
                 ],
                 "responses": {
                     "204": {
-                        "description": "No Content",
+                        "description": "No Content"
+                    },
+                    "400": {
+                        "description": "Bad Request: Invalid parameter or deletion issue",
                         "schema": {
-                            "type": "int"
+                            "$ref": "#/definitions/dto.ErrorResponse"
                         }
                     }
                 }
@@ -159,57 +160,139 @@
         }
     },
     "definitions": {
-        "models.Book": {
+        "dto.BookResponse": {
             "type": "object",
-            "required": [
-                "amount",
-                "genre",
-                "name",
-                "price"
-            ],
             "properties": {
-                "amount": {
-                    "type": "integer",
-                    "minimum": 0
+                "author_name": {
+                    "type": "string"
                 },
-                "genre": {
-                    "type": "integer"
+                "cover": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "genres": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "id": {
                     "type": "integer"
                 },
                 "name": {
-                    "type": "string",
-                    "maxLength": 100
+                    "type": "string"
                 },
-                "price": {
+                "page_count": {
+                    "type": "integer"
+                },
+                "rate": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.CreateBookRequest": {
+            "type": "object",
+            "required": [
+                "author_name",
+                "cover",
+                "description",
+                "genres",
+                "name",
+                "page_count"
+            ],
+            "properties": {
+                "author_name": {
+                    "type": "string"
+                },
+                "cover": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "genres": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "page_count": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "rate": {
                     "type": "number",
+                    "maximum": 10,
                     "minimum": 0
                 }
             }
         },
-        "models.BookRequest": {
+        "dto.ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.SimpleResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "dto.UpdateBookRequest": {
             "type": "object",
             "required": [
-                "amount",
-                "genre",
+                "author_name",
+                "cover",
+                "description",
+                "genres",
                 "name",
-                "price"
+                "page_count"
             ],
             "properties": {
-                "amount": {
-                    "type": "integer",
-                    "minimum": 0
+                "author_name": {
+                    "type": "string"
                 },
-                "genre": {
-                    "type": "integer"
+                "cover": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "description": {
+                    "type": "string"
+                },
+                "genres": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
                 },
                 "name": {
-                    "type": "string",
-                    "maxLength": 100
+                    "type": "string"
                 },
-                "price": {
+                "page_count": {
+                    "type": "integer",
+                    "minimum": 1
+                },
+                "rate": {
                     "type": "number",
+                    "maximum": 10,
                     "minimum": 0
                 }
             }

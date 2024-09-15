@@ -1,6 +1,7 @@
 package utils
 
 import (
+	dto "book-api/pkg/dto/http"
 	"encoding/json"
 	"net/http"
 )
@@ -26,5 +27,5 @@ func (w *ResponseWriter) JSON(statusCode int, data interface{}) error {
 }
 
 func (w *ResponseWriter) Error(statusCode int, message string) error {
-	return w.JSON(statusCode, map[string]string{"error": message})
+	return w.JSON(statusCode, dto.ErrorResponse{Error: message})
 }

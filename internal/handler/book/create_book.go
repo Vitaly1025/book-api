@@ -30,14 +30,16 @@ func NewCreateBookHandler(s CreateBookService, l *slog.Logger) *CreateBookHandle
 
 const op = "CreateBook"
 
-// @Summary Create a book
-// @Tags Book Operations
-// @Description Create a book with specific data
-// @Accept text/json
-// @Param request body dto.CreateBookRequest
-// @Produce  json
-// @Router /book [post]
-// @Success  200  {int} resp
+// CreateBook godoc
+// @Summary Create a new book
+// @Description Create a new book entry in the system
+// @Tags Books
+// @Accept json
+// @Produce json
+// @Param request body dto.CreateBookRequest true "Create Book Request"
+// @Success 200 {object} dto.SimpleResponse "Book created successfully"
+// @Failure 400 {object} dto.ErrorResponse "Invalid data or validation failed"
+// @Router /books [post]
 func (h *CreateBookHandler) CreateBook(w http.ResponseWriter, r *http.Request) {
 	log := h.logger.With(
 		slog.String("operation", op),

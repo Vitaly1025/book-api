@@ -23,14 +23,16 @@ func NewDeleteBookHandler(s DeleteBookService, l *slog.Logger) *DeleteBookHandle
 	return &DeleteBookHandler{bookService: s, logger: l}
 }
 
-// @Summary Delete book by ID
-// @Tags Book Operations
-// @Description This method delete book by id
-// @Accept text/json
-// @Param id path int true "Book Id"
-// @Produce  json
-// @Router /book/{id} [delete]
-// @Success  204  {int} resp
+// DeleteBook godoc
+// @Summary Delete a book by ID
+// @Description Delete a book entry from the system using the book's ID
+// @Tags Books
+// @Accept json
+// @Produce json
+// @Param id query int true "Book ID"
+// @Success 204 "No Content"
+// @Failure 400 {object} dto.ErrorResponse "Bad Request: Invalid parameter or deletion issue"
+// @Router /books [delete]
 func (h *DeleteBookHandler) DeleteBook(w http.ResponseWriter, r *http.Request) {
 	const op = "DeleteBook"
 	log := h.logger.With(

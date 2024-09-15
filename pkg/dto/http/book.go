@@ -34,3 +34,7 @@ type BookResponse struct {
 type SimpleResponse struct {
 	ID int `json:"id"`
 }
+
+type ErrorResponse struct {
+	Error string `json:"error"`
+}

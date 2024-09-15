@@ -25,13 +25,16 @@ func NewGetBooksByIdsHandler(s GetBookByIdsService, l *slog.Logger) *GetBookById
 	return &GetBookByIdsHandler{bookService: s, logger: l}
 }
 
-// @Summary Get book by ID
-// @Tags Book Operations
-// @Description This method gets book via id
-// @Accept text/json
-// @Param id path int true "Book Ids"
-// @Produce  json
-// @Router /book/{id} [get]
+// GetBookByIds godoc
+// @Summary Retrieve books by their IDs
+// @Description Retrieve a list of books by providing their IDs as a comma-separated query parameter.
+// @Tags Books
+// @Accept json
+// @Produce json
+// @Param ids query string true "Comma-separated list of book IDs"
+// @Success 200 {array} dto.BookResponse "List of books"
+// @Failure 400 {object} dto.ErrorResponse "Error retrieving books"
+// @Router /books [get]
 func (h *GetBookByIdsHandler) GetBookByIds(w http.ResponseWriter, r *http.Request) {
 	const op = "GetBookById"
 	log := h.logger.With(

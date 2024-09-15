@@ -28,14 +28,16 @@ func NewUpdateBookHandler(s UpdateBookService, l *slog.Logger) *UpdateBookHandle
 	return &UpdateBookHandler{bookService: s, logger: l, validator: validator.New()}
 }
 
-// @Summary Update book
-// @Tags Book Operations
-// @Description Update book
-// @Accept text/json
-// @Param request body models.Book true "Book"
-// @Produce  json
-// @Router /book [put]
-// @Success  200  {int} resp
+// UpdateBook godoc
+// @Summary Update an existing book
+// @Description Update the details of an existing book in the system
+// @Tags Books
+// @Accept json
+// @Produce json
+// @Param request body dto.UpdateBookRequest true "Update Book Request"
+// @Success 200 {object} dto.BookResponse "Book updated successfully"
+// @Failure 400 {object} dto.ErrorResponse "Invalid data or validation failed"
+// @Router /books [put]
 func (h *UpdateBookHandler) UpdateBook(w http.ResponseWriter, r *http.Request) {
 	const op = "UpdateBook"
 	log := h.logger.With(
