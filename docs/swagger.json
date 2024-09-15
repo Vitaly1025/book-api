@@ -34,7 +34,8 @@
                         "name": "genre",
                         "in": "query"
                     }
-                ]
+                ],
+                "responses": {}
             },
             "put": {
                 "description": "Update book",
@@ -122,7 +123,8 @@
                         "in": "path",
                         "required": true
                     }
-                ]
+                ],
+                "responses": {}
             },
             "delete": {
                 "description": "This method delete book by id",
@@ -167,7 +169,8 @@
             ],
             "properties": {
                 "amount": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 0
                 },
                 "genre": {
                     "type": "integer"
@@ -176,10 +179,12 @@
                     "type": "integer"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 100
                 },
                 "price": {
-                    "type": "number"
+                    "type": "number",
+                    "minimum": 0
                 }
             }
         },
@@ -193,16 +198,19 @@
             ],
             "properties": {
                 "amount": {
-                    "type": "integer"
+                    "type": "integer",
+                    "minimum": 0
                 },
                 "genre": {
                     "type": "integer"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "maxLength": 100
                 },
                 "price": {
-                    "type": "number"
+                    "type": "number",
+                    "minimum": 0
                 }
             }
         }

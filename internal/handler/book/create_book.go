@@ -1,0 +1,74 @@
+package handlers
+
+import (
+	"context"
+	"log/slog"
+	"net/http"
+
+	"book-api/internal/domain"
+	"book-api/internal/mapper"
+	"book-api/internal/utils"
+	dto "book-api/pkg/dto/http"
+
+	"github.com/go-playground/validator/v10"
+)
+
+//go:generate mockgen -source=create_book.go -destination=mocks/create_book.go
+type CreateBookService interface {
+	CreateBook(ctx context.Context, req domain.BookEntity) (int, error)
+}
+
+type CreateBookHandler struct {
+	bs        CreateBookService
+	logger    *slog.Logger
+	validator *validator.Validate
+}
+
+func NewCreateBookHandler(s CreateBookService, l *slog.Logger) *CreateBookHandler {
+	return &CreateBookHandler{bs: s, logger: l, validator: validator.New()}
+}
+
+const op = "CreateBook"
+
+// @Summary Create a book
+// @Tags Book Operations
+// @Description Create a book with specific data
+// @Accept text/json
+// @Param request body dto.CreateBookRequest
+// @Produce  json
+// @Router /book [post]
+// @Success  200  {int} resp
+func (h *CreateBookHandler) CreateBook(w http.ResponseWriter, r *http.Request) {
+	log := h.logger.With(
+		slog.String("operation", op),
+	)
+	ctx := context.Background()
+	rw := utils.NewResponseWriter(w)
+	rr := utils.NewRequestReader()
+
+	var req dto.CreateBookRequest
+	err := rr.ParsePostRequest(r, &req)
+	if err != nil {
+		log.Error("cannot parse post request", slog.String("error", err.Error()))
+		rw.Error(http.StatusBadRequest, "invalid data")
+		return
+	}
+
+	err = h.validator.Struct(&req)
+	if err != nil {
+		log.Error("cannot validate post request", slog.String("error", err.Error()))
+		rw.Error(http.StatusBadRequest, "data validation failed")
+		return
+	}
+
+	query := mapper.ToDomainCreateBook(req)
+
+	resp, err := h.bs.CreateBook(ctx, query)
+	if err != nil {
+		log.Error("cannot create book", slog.String("error", err.Error()))
+		rw.Error(http.StatusBadRequest, "smth went wrong :(")
+		return
+	}
+
+	rw.JSON(http.StatusOK, mapper.ToDTOCreateBook(resp))
+}

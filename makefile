@@ -1,40 +1,49 @@
-BINARY_NAME=book-api
-TARGET_OS=windows
-OUTPUT_DIR=${GOPATH}/bin
+APP_NAME := book-api
+BUILD_DIR := build
+VERSION := $(shell git describe --tags --always)
+BUILD_TIME := $(shell date -u +%Y-%m-%dT%H:%M:%SZ)
+MAIN := ./cmd/$(APP_NAME)/main.go
+LDFLAGS := -ldflags="-s -w -X 'main.Version=$(VERSION)' -X 'main.BuildTime=$(BUILD_TIME)'"
+
+ifneq (,$(wildcard ./.env))
+    include .env
+    export
+endif
 
 # Builds book api
 build:
-	GOARCH=amd64 GOOS=${TARGET_OS} go build -o '${OUTPUT_DIR}/${BINARY_NAME}-${TARGET_OS}' bookstore/cmd/bookstore-server
+	go build -o bin/$(APP_NAME) $(MAIN) t
 
 # Runs the database container
-run_db:
-	docker run --name=book-db -e POSTGRES_PASSWORD='1234qwerty' -p 5436:5432 -d --rm postgres
-# Runs book api
-run:
-	GOARCH=amd64 GOOS=${TARGET_OS} go run book-api/cmd/main.go
-
-# Runs all
-make run_all:
-	docker-compose up
+docker-build:
+	docker build -t $(APP_NAME) .
 
 # Checks sources
 lint:
 	golangci-lint run -v
 
-# Test book api
-.PHONY: test
-test:
-	go test .\pkg\repository && go test .\pkg\service
-# Migrates the database UP
-migration_up:
-	migrate -path ./schema -database 'postgres://postgres:1234qwerty@db:5432/postgres?sslmode=disable' up
-# Migrates the database DOWN
-migration_down:
-	migrate -path ./schema -database 'postgres://postgres:1234qwerty@db:5432/postgres?sslmode=disable' down
-
 # Downloads modules
 dep:
 	go mod download
+
+# Runs book api
+run-locally:
+	go run $(MAIN)
+
+# Runs all
+compose-up:
+	docker compose up db book-api -d
+
+compose-down:
+	docker compose down
+
+# Test book api
+test:
+	go test ./internal/repository && go test ./internal/service
+	
+# Migrates the database UP
+migration_up:
+	docker compose up migrator
 	
 # Downloads additional tools
 prepare:

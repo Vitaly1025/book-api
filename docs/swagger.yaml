@@ -2,14 +2,17 @@ definitions:
   models.Book:
     properties:
       amount:
+        minimum: 0
         type: integer
       genre:
         type: integer
       id:
         type: integer
       name:
+        maxLength: 100
         type: string
       price:
+        minimum: 0
         type: number
     required:
     - amount
@@ -20,12 +23,15 @@ definitions:
   models.BookRequest:
     properties:
       amount:
+        minimum: 0
         type: integer
       genre:
         type: integer
       name:
+        maxLength: 100
         type: string
       price:
+        minimum: 0
         type: number
     required:
     - amount
@@ -56,6 +62,7 @@ paths:
         type: string
       produces:
       - application/json
+      responses: {}
       summary: Get books
       tags:
       - Book Operations
@@ -134,6 +141,7 @@ paths:
         type: integer
       produces:
       - application/json
+      responses: {}
       summary: Get book by ID
       tags:
       - Book Operations

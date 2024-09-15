@@ -2,28 +2,44 @@ version: '3.8'
 
 services:
   db:
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=1234qwerty
     image: postgres:latest
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     volumes:
       - ./.database/postgres/data:/var/lib/postgresql/data
     ports:
-      - 5436:5432
+      - 5432:5432
     networks:
-      - inner_host
+      - inner_host 
+      
   book-api:
-    build: ./
-    command: ./book-api
+    image: book-api:latest
     env_file:
-      - ./configs/config.env
+      - .env
+    volumes:
+      - ./config/config.yaml:/app/config.yaml
     ports:
       - 4000:4000
+    command: ["/bin/sh", "-c", "ls -l /app && cat /app/config.yaml && /app/book-api -config /config.yaml"]
     networks:
       - inner_host
     depends_on:
       - db
+
+  migrator:
+    image: migrate/migrate
+    networks:
+      - inner_host
+    volumes:
+      - ./migrations:/migrations
+    env_file:
+      - .env
+    command: ["-path", "/migrations", "-database", "postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}?sslmode=disable ${MIGRATION_COMMAND} ${MIGRATION_VERSION}"]
+    links:
+      - db
+
 networks:
   inner_host:
     driver: "bridge"
